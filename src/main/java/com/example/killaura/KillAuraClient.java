@@ -20,7 +20,6 @@ public class KillAuraClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        // 注册 /km on 和 /km off 命令
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("km")
                 .then(ClientCommandManager.literal("on").executes(context -> {
@@ -36,24 +35,20 @@ public class KillAuraClient implements ClientModInitializer {
             );
         });
 
-        // 客户端 Tick 事件，每游戏 Tick 触发一次 (20 TPS = 20 CPS)
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!enabled) return;
             if (client.player == null || client.world == null || client.interactionManager == null) return;
 
-            // 检查主手或副手是否拿着重锤 (Mace)
             boolean holdingMace = client.player.getMainHandStack().isOf(Items.MACE) ||
                                   client.player.getOffHandStack().isOf(Items.MACE);
             if (!holdingMace) return;
 
-            // 控制 20 CPS 频率 (每个 Tick 攻击一次)
             tickCounter++;
             if (tickCounter < 1) {
                 return;
             }
             tickCounter = 0;
 
-            // 寻找攻击范围内的目标 (4.5 格半径)
             double reach = 4.5;
             Box box = client.player.getBoundingBox().expand(reach);
             
@@ -65,10 +60,7 @@ public class KillAuraClient implements ClientModInitializer {
             ).stream().min(Comparator.comparingDouble(client.player::distanceTo)).orElse(null);
 
             if (target != null) {
-                // 强制无视蓄力：重置冷却进度
                 client.player.resetLastAttackedTicks();
-                
-                // 攻击目标
                 client.interactionManager.attackEntity(client.player, target);
                 client.player.swingHand(Hand.MAIN_HAND);
             }
