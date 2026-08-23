@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "killaura_mace",
+  "version": "1.0.0",
+  "name": "Mace KillAura",
+  "description": "A Fabric mod for 1.21.11 featuring a Mace KillAura with 20 CPS toggleable via /km command.",
+  "authors": ["YourName"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.example.killaura.KillAuraClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "1.21.11",
+    "java": "21",
+    "fabric-api": "*"
+  }
+}
