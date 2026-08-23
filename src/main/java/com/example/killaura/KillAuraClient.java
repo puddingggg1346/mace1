@@ -60,7 +60,6 @@ public class KillAuraClient implements ClientModInitializer {
             ).stream().min(Comparator.comparingDouble(client.player::distanceTo)).orElse(null);
 
             if (target != null) {
-                client.player.resetLastAttackedTicks();
                 client.interactionManager.attackEntity(client.player, target);
                 client.player.swingHand(Hand.MAIN_HAND);
             }
